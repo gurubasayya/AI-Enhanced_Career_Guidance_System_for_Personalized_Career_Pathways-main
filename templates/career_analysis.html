@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Career Analysis - CareerAI{% endblock %}
+
+{% block head %}
+<style>
+    .career-guidance {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #4e73df;
+    }
+    
+    .guidance-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px 0;
+    }
+    
+    .guidance-content {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e3e6f0;
+        white-space: pre-line;
+    }
+    
+    .guidance-content.collapsed {
+        display: none;
+    }
+    
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .toggle-icon.collapsed {
+        transform: rotate(-90deg);
+    }
+    
+    .loading-guidance {
+        text-align: center;
+        padding: 10px;
+        color: #6c757d;
+    }
+    
+    .guidance-details h5 {
+        color: #4e73df;
+        margin-bottom: 10px;
+    }
+    
+    .guidance-text p {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    
+    .guidance-text ul, .guidance-text ol {
+        margin-left: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .guidance-text li {
+        margin-bottom: 8px;
+    }
+    
+    .career-actions {
+        margin-top: 12px;
+        text-align: right;
+    }
+    
+    .guidance-container {
+        margin-top: 10px;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border-left: 3px solid #4e73df;
+    }
+    
+    .guidance-details {
+        margin-top: 8px;
+        line-height: 1.6;
+    }
+    
+    .guidance-container {
+        margin-top: 12px;
+        padding: 16px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #4e73df;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+    
+    .guidance-container.hidden {
+        display: none;
+    }
+    
+    .loading-guidance {
+        padding: 12px;
+        color: #6c757d;
+        font-style: italic;
+        text-align: center;
+    }
+    
+    .career-actions .btn {
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+    }
+    
+    .career-actions .btn:disabled {
+        opacity: 0.7;
+    }
+    
+    /* New styles for structured content */
+    .career-guidance-content h5 {
+        color: #2c3e50;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+    
+    .career-guidance-content h6 {
+        color: #34495e;
+        font-size: 0.95rem;
+        margin: 16px 0 8px;
+        font-weight: 600;
+    }
+    
+    .skill-list,
+    .learning-path,
+    .resource-list {
+        padding-left: 20px;
+        margin: 8px 0 12px;
+    }
+    
+    .skill-list li,
+    .resource-list li {
+        margin-bottom: 6px;
+        list-style-type: disc;
+    }
+    
+    .learning-path li {
+        margin-bottom: 8px;
+        list-style-type: decimal;
+    }
+    
+    .progress-note {
+        margin-top: 16px;
+        padding: 10px;
+        background: #e9f7fe;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        color: #0c5460;
+    }
+    
+    .text-success {
+        color: #28a745 !important;
+    }
+    
+    .text-warning {
+        color: #ffc107 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- JavaScript will be loaded at the end of the body -->
+
+<div class="analysis-container">
+    <div class="analysis-header">
+        <h1>Your Career Analysis Report</h1>
+        <p>Based on your profile, skills, and assessment results</p>
+    </div>
+
+    <div class="analysis-grid">
+        <!-- Career Recommendations -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-bullseye"></i> Recommended Career Paths</h2>
+            </div>
+            <div class="career-recommendations">
+                {% for career in results.recommended_careers %}
+                <div class="career-item">
+                    <div class="career-info">
+                        <h3>{{ career.title }}</h3>
+                        <div class="career-stats">
+                            <span class="match-score">{{ career.match }}% Match</span>
+                            <span class="growth-indicator growth-{{ career.growth.lower().replace(' ', '-') }}">
+                                {{ career.growth }} Growth
+                            </span>
+                        </div>
+                    </div>
+                    <div class="career-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ career.match }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Get Guidance Button -->
+                    <div class="career-actions">
+                        <button class="btn btn-primary btn-sm guidance-btn" 
+                                data-career-id="{{ career.title|replace(' ', '-')|lower }}"
+                                data-match="{{ career.match|int }}"
+                                data-growth="{{ career.growth|escapejs }}">
+                            <i class="fas fa-robot"></i> Get AI Guidance
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Market Suitability -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-globe"></i> Global Market Suitability</h2>
+            </div>
+            <div class="suitability-score">
+                <div class="score-circle">
+                    <div class="score-value">{{ results.trending_jobs_suitability }}%</div>
+                    <div class="score-label">Market Ready</div>
+                </div>
+                <p>You are well-positioned for trending jobs in the global market. Your skills align with current industry demands.</p>
+            </div>
+        </div>
+
+        <!-- Skill Gaps -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-line"></i> Skill Gap Analysis</h2>
+            </div>
+            <div class="skill-gaps">
+                {% for gap in results.skill_gaps %}
+                <div class="skill-gap-item">
+                    <div class="skill-info">
+                        <h4>{{ gap.skill }}</h4>
+                        <div class="skill-meta">
+                            <span class="importance importance-{{ gap.importance.lower() }}">{{ gap.importance }} Priority</span>
+                            <span class="current-level">Current: {{ gap.current_level }}</span>
+                        </div>
+                    </div>
+                    <div class="skill-action">
+                        <button class="btn btn-sm btn-outline">Learn More</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Course Recommendations -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-graduation-cap"></i> Recommended Courses</h2>
+            </div>
+            <div class="course-recommendations">
+                {% for course in results.recommended_courses %}
+                <div class="course-item">
+                    <div class="course-info">
+                        <h4>{{ course.title }}</h4>
+                        <div class="course-meta">
+                            <span class="provider">{{ course.provider }}</span>
+                            <span class="duration">{{ course.duration }}</span>
+                        </div>
+                    </div>
+                    <div class="course-action">
+                        <button class="btn btn-sm btn-primary">Enroll Now</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="analysis-actions">
+        <button class="btn btn-primary">
+            <i class="fas fa-download"></i>
+            Download Report
+        </button>
+        <button class="btn btn-secondary">
+            <i class="fas fa-share"></i>
+            Share Results
+        </button>
+        <button class="btn btn-outline">
+            <i class="fas fa-redo"></i>
+            Retake Assessment
+        </button>
+    </div>
+</div>
+
+<!-- Include the career guidance JavaScript -->
+<script src="{{ url_for('static', filename='js/career-guidance.js') }}"></script>
+{% endblock %}

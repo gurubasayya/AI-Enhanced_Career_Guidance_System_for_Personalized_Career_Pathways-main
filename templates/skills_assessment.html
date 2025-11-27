@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Skills Assessment - CareerAI{% endblock %}
+
+{% block content %}
+<div class="step-container">
+    <div class="step-header">
+        <div class="step-progress">
+            <div class="step completed">1</div>
+            <div class="step completed">2</div>
+            <div class="step active">3</div>
+            <div class="step">4</div>
+        </div>
+        <h2>Skills Assessment</h2>
+        <p>Help us understand your technical and soft skills</p>
+    </div>
+
+    <div class="form-card">
+        <form method="POST" class="skills-form">
+            <div class="skills-section">
+                <h3><i class="fas fa-code"></i> Technical Skills</h3>
+                <div class="skills-grid" id="technical-skills-grid">
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="Python">
+                        <span class="checkmark"></span>
+                        Python
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="JavaScript">
+                        <span class="checkmark"></span>
+                        JavaScript
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="Java">
+                        <span class="checkmark"></span>
+                        Java
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="C++">
+                        <span class="checkmark"></span>
+                        C++
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="React">
+                        <span class="checkmark"></span>
+                        React
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="Node.js">
+                        <span class="checkmark"></span>
+                        Node.js
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="SQL">
+                        <span class="checkmark"></span>
+                        SQL
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="Machine Learning">
+                        <span class="checkmark"></span>
+                        Machine Learning
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="Data Analysis">
+                        <span class="checkmark"></span>
+                        Data Analysis
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="technical_skills" value="Cloud Computing">
+                        <span class="checkmark"></span>
+                        Cloud Computing
+                    </label>
+                </div>
+                <div class="add-skill-section">
+                    <div class="form-group">
+                        <input type="text" id="new-technical-skill" placeholder="Add custom technical skill..." maxlength="50">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addSkill('technical')">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-section">
+                <h3><i class="fas fa-users"></i> Soft Skills</h3>
+                <div class="skills-grid" id="soft-skills-grid">
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="soft_skills" value="Leadership">
+                        <span class="checkmark"></span>
+                        Leadership
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="soft_skills" value="Communication">
+                        <span class="checkmark"></span>
+                        Communication
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="soft_skills" value="Problem Solving">
+                        <span class="checkmark"></span>
+                        Problem Solving
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="soft_skills" value="Teamwork">
+                        <span class="checkmark"></span>
+                        Teamwork
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="soft_skills" value="Creativity">
+                        <span class="checkmark"></span>
+                        Creativity
+                    </label>
+                    <label class="skill-checkbox">
+                        <input type="checkbox" name="soft_skills" value="Time Management">
+                        <span class="checkmark"></span>
+                        Time Management
+                    </label>
+                </div>
+                <div class="add-skill-section">
+                    <div class="form-group">
+                        <input type="text" id="new-soft-skill" placeholder="Add custom soft skill..." maxlength="50">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addSkill('soft')">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="experience_level">Experience Level</label>
+                    <select id="experience_level" name="experience_level" required>
+                        <option value="">Select Experience Level</option>
+                        <option value="Beginner">Beginner (0-1 years)</option>
+                        <option value="Intermediate">Intermediate (1-3 years)</option>
+                        <option value="Advanced">Advanced (3-5 years)</option>
+                        <option value="Expert">Expert (5+ years)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="certifications">Certifications (Optional)</label>
+                    <textarea id="certifications" name="certifications" rows="3" placeholder="List any relevant certifications you have..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-arrow-right"></i>
+                Continue to Assessment Choice
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+function addSkill(type) {
+    const inputId = type === 'technical' ? 'new-technical-skill' : 'new-soft-skill';
+    const gridId = type === 'technical' ? 'technical-skills-grid' : 'soft-skills-grid';
+    const skillName = type === 'technical' ? 'technical_skills' : 'soft_skills';
+    
+    const input = document.getElementById(inputId);
+    const skillValue = input.value.trim();
+    
+    if (skillValue === '') {
+        alert('Please enter a skill name');
+        return;
+    }
+    
+    if (skillValue.length < 2) {
+        alert('Skill name must be at least 2 characters long');
+        return;
+    }
+    
+    // Check if skill already exists
+    const existingSkills = document.querySelectorAll(`input[name="${skillName}"]`);
+    for (let skill of existingSkills) {
+        if (skill.value.toLowerCase() === skillValue.toLowerCase()) {
+            alert('This skill already exists');
+            return;
+        }
+    }
+    
+    // Create new skill checkbox
+    const grid = document.getElementById(gridId);
+    const skillLabel = document.createElement('label');
+    skillLabel.className = 'skill-checkbox custom-skill';
+    skillLabel.innerHTML = `
+        <input type="checkbox" name="${skillName}" value="${skillValue}" checked>
+        <span class="checkmark"></span>
+        ${skillValue}
+        <button type="button" class="remove-skill" onclick="removeSkill(this)" title="Remove skill">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    grid.appendChild(skillLabel);
+    input.value = '';
+}
+
+function removeSkill(button) {
+    button.parentElement.remove();
+}
+
+// Allow Enter key to add skills
+document.getElementById('new-technical-skill').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        addSkill('technical');
+    }
+});
+
+document.getElementById('new-soft-skill').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        addSkill('soft');
+    }
+});
+</script>
+{% endblock %}

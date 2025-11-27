@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment Choice - CareerAI{% endblock %}
+
+{% block content %}
+<div class="step-container">
+    <div class="step-header">
+        <div class="step-progress">
+            <div class="step completed">1</div>
+            <div class="step completed">2</div>
+            <div class="step completed">3</div>
+            <div class="step active">4</div>
+        </div>
+        <h2>Aptitude Assessment</h2>
+        <p>Would you like to take our comprehensive aptitude test for more accurate recommendations?</p>
+    </div>
+
+    <div class="choice-container">
+        <form method="POST" class="choice-form">
+            <div class="choice-cards">
+                <div class="choice-card">
+                    <div class="choice-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Take Aptitude Test</h3>
+                    <p>Complete our 10-minute assessment to get highly personalized career recommendations based on your cognitive abilities and problem-solving skills.</p>
+                    <ul class="choice-benefits">
+                        <li><i class="fas fa-check"></i> More accurate career matching</li>
+                        <li><i class="fas fa-check"></i> Detailed skill analysis</li>
+                        <li><i class="fas fa-check"></i> Personalized learning paths</li>
+                    </ul>
+                    <button type="submit" name="take_exam" value="yes" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Start Assessment
+                    </button>
+                </div>
+
+                <div class="choice-card">
+                    <div class="choice-icon">
+                        <i class="fas fa-fast-forward"></i>
+                    </div>
+                    <h3>Skip Assessment</h3>
+                    <p>Proceed directly to your career analysis based on the information you've already provided. You can always take the test later.</p>
+                    <ul class="choice-benefits">
+                        <li><i class="fas fa-check"></i> Quick results</li>
+                        <li><i class="fas fa-check"></i> Basic recommendations</li>
+                        <li><i class="fas fa-check"></i> Can retake anytime</li>
+                    </ul>
+                    <button type="submit" name="take_exam" value="no" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i>
+                        Skip to Results
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

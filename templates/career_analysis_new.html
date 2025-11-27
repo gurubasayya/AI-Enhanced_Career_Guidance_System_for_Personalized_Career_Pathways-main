@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Career Analysis - CareerAI{% endblock %}
+
+{% block head %}
+<style>
+    .career-guidance {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #4e73df;
+    }
+    
+    .guidance-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px 0;
+    }
+    
+    .guidance-content {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e3e6f0;
+        white-space: pre-line;
+    }
+    
+    .guidance-content.collapsed {
+        display: none;
+    }
+    
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .toggle-icon.collapsed {
+        transform: rotate(-90deg);
+    }
+    
+    .loading-guidance {
+        text-align: center;
+        padding: 10px;
+        color: #6c757d;
+    }
+    
+    .guidance-details h5 {
+        color: #4e73df;
+        margin-bottom: 10px;
+    }
+    
+    .guidance-text p {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    
+    .guidance-text ul, .guidance-text ol {
+        margin-left: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .guidance-text li {
+        margin-bottom: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analysis-container">
+    <div class="analysis-header">
+        <h1>Your Career Analysis Report</h1>
+        <p>Based on your profile, skills, and assessment results</p>
+    </div>
+
+    <div class="analysis-grid">
+        <!-- Career Recommendations -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-bullseye"></i> Recommended Career Paths</h2>
+            </div>
+            <div class="career-recommendations">
+                {% for career in results.recommended_careers %}
+                <div class="career-item">
+                    <div class="career-info">
+                        <h3>{{ career.title }}</h3>
+                        <div class="career-stats">
+                            <span class="match-score">{{ career.match }}% Match</span>
+                            <span class="growth-indicator growth-{{ career.growth.lower().replace(' ', '-') }}">
+                                {{ career.growth }} Growth
+                            </span>
+                        </div>
+                    </div>
+                    <div class="career-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ career.match }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Career Guidance Section -->
+                    <div class="career-guidance">
+                        <div class="guidance-header" onclick="toggleGuidance('{{ career.title|replace(' ', '-') }}')">
+                            <h4><i class="fas fa-robot"></i> AI-Powered Career Guidance</h4>
+                            <i id="toggle-{{ career.title|replace(' ', '-') }}" class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                        <div id="guidance-{{ career.title|replace(' ', '-') }}" class="guidance-content collapsed">
+                            <div class="loading-guidance">
+                                <i class="fas fa-spinner fa-spin"></i> Generating personalized guidance...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Market Suitability -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-globe"></i> Global Market Suitability</h2>
+            </div>
+            <div class="suitability-score">
+                <div class="score-circle">
+                    <div class="score-value">{{ results.trending_jobs_suitability }}%</div>
+                    <div class="score-label">Market Ready</div>
+                </div>
+                <p>You are well-positioned for trending jobs in the global market. Your skills align with current industry demands.</p>
+            </div>
+        </div>
+
+        <!-- Skill Gaps -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-line"></i> Skill Gap Analysis</h2>
+            </div>
+            <div class="skill-gaps">
+                {% for gap in results.skill_gaps %}
+                <div class="skill-gap-item">
+                    <div class="skill-info">
+                        <h4>{{ gap.skill }}</h4>
+                        <div class="skill-meta">
+                            <span class="importance importance-{{ gap.importance.lower() }}">{{ gap.importance }} Priority</span>
+                            <span class="current-level">Current: {{ gap.current_level }}</span>
+                        </div>
+                    </div>
+                    <div class="skill-action">
+                        <button class="btn btn-sm btn-outline">Learn More</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Course Recommendations -->
+        <div class="analysis-card">
+            <div class="card-header">
+                <h2><i class="fas fa-graduation-cap"></i> Recommended Courses</h2>
+            </div>
+            <div class="course-recommendations">
+                {% for course in results.recommended_courses %}
+                <div class="course-item">
+                    <div class="course-info">
+                        <h4>{{ course.title }}</h4>
+                        <div class="course-meta">
+                            <span class="provider">{{ course.provider }}</span>
+                            <span class="duration">{{ course.duration }}</span>
+                        </div>
+                    </div>
+                    <div class="course-action">
+                        <button class="btn btn-sm btn-primary">Enroll Now</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="analysis-actions">
+        <button class="btn btn-primary">
+            <i class="fas fa-download"></i>
+            Download Report
+        </button>
+        <button class="btn btn-secondary">
+            <i class="fas fa-share"></i>
+            Share Results
+        </button>
+        <button class="btn btn-outline">
+            <i class="fas fa-redo"></i>
+            Retake Assessment
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Load career guidance when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all career items
+        const careerItems = document.querySelectorAll('.career-item');
+        
+        // Fetch guidance for each career
+        careerItems.forEach(item => {
+            const careerTitle = item.querySelector('h3').textContent;
+            fetchCareerGuidance(careerTitle);
+        });
+    });
+    
+    // Toggle guidance visibility
+    function toggleGuidance(careerId) {
+        const content = document.getElementById(`guidance-${careerId}`);
+        const icon = document.getElementById(`toggle-${careerId}`);
+        
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('collapsed');
+    }
+    
+    // Fetch career guidance from the server
+    function fetchCareerGuidance(careerTitle) {
+        const encodedTitle = encodeURIComponent(careerTitle);
+        const guidanceElement = document.getElementById(`guidance-${careerTitle.replace(/ /g, '-')}`);
+        
+        fetch(`/api/career-guidance/${encodedTitle}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch career guidance');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    guidanceElement.innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            ${data.error}
+                        </div>`;
+                } else {
+                    guidanceElement.innerHTML = `
+                        <div class="guidance-details">
+                            <h5>Your Career Path to ${data.growth} Growth</h5>
+                            <div class="guidance-text">
+                                ${formatGuidanceText(data.guidance)}
+                            </div>
+                        </div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching career guidance:', error);
+                guidanceElement.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> 
+                        Unable to load career guidance. Please try again later.
+                    </div>`;
+            });
+    }
+    
+    // Format the guidance text with proper spacing and line breaks
+    function formatGuidanceText(text) {
+        if (!text) return '';
+        
+        // Split by numbered points or bullet points
+        const points = text.split(/\d+\.\s*|•\s*/).filter(point => point.trim() !== '');
+        
+        if (points.length > 0) {
+            return points.map(point => `<p>${point.trim()}</p>`).join('');
+        }
+        
+        // If no clear points, just return the text with line breaks
+        return text.replace(/\n/g, '<br>');
+    }
+</script>
+{% endblock %}

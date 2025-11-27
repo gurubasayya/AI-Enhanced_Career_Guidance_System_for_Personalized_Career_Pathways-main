@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Aptitude Test - CareerAI{% endblock %}
+
+{% block content %}
+<div class="test-container">
+    <div class="test-header">
+        <h2>Aptitude Assessment</h2>
+        <p>Answer the following questions to help us understand your strengths</p>
+        <div class="test-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Question 1 of 5</span>
+        </div>
+    </div>
+
+    <form method="POST" class="test-form" id="testForm">
+        <div class="question-card active" data-question="1">
+            <h3>Logical Reasoning</h3>
+            <p>If all roses are flowers and some flowers fade quickly, which statement is definitely true?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="A" required>
+                    <span>All roses fade quickly</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="B">
+                    <span>Some roses might fade quickly</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="C">
+                    <span>No roses fade quickly</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="D">
+                    <span>All flowers are roses</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-card" data-question="2">
+            <h3>Analytical Thinking</h3>
+            <p>A company's sales increased by 20% in Q1, decreased by 10% in Q2, and increased by 15% in Q3. What's the overall change?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="A" required>
+                    <span>25% increase</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="B">
+                    <span>24.2% increase</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="C">
+                    <span>23.8% increase</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="D">
+                    <span>22% increase</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-card" data-question="3">
+            <h3>Problem Solving</h3>
+            <p>You're managing a project with tight deadlines. Two team members have conflicting approaches. What's your best strategy?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="A" required>
+                    <span>Choose the approach from the senior member</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="B">
+                    <span>Facilitate a discussion to find a hybrid solution</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="C">
+                    <span>Implement both approaches separately</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="D">
+                    <span>Escalate to upper management</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-card" data-question="4">
+            <h3>Creativity</h3>
+            <p>How would you approach designing a mobile app for elderly users who aren't tech-savvy?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="A" required>
+                    <span>Use standard mobile design patterns</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="B">
+                    <span>Focus on large buttons, simple navigation, and voice commands</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="C">
+                    <span>Include lots of features to provide value</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="D">
+                    <span>Copy successful apps in the market</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="question-card" data-question="5">
+            <h3>Leadership</h3>
+            <p>Your team is demotivated after a project failure. How do you rebuild morale?</p>
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q5" value="A" required>
+                    <span>Focus on individual performance reviews</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="B">
+                    <span>Organize team building activities</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="C">
+                    <span>Acknowledge the failure, extract learnings, and set new achievable goals</span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="D">
+                    <span>Assign blame and restructure the team</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="test-navigation">
+            <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                <i class="fas fa-arrow-left"></i>
+                Previous
+            </button>
+            <button type="button" class="btn btn-primary" id="nextBtn">
+                Next
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">
+                <i class="fas fa-check"></i>
+                Complete Assessment
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
