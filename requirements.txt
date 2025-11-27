@@ -3,7 +3,7 @@ Werkzeug==3.0.0
 python-dotenv==1.0.0
 beautifulsoup4==4.12.2
 azure-ai-inference==1.0.0b9
-azure-core==1.29.5
+azure-core>=1.30.0
 pdfplumber==0.10.3
 python-docx==1.0.1
 Pillow>=10.1.0
