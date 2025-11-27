@@ -26,7 +26,7 @@ def escapejs_filter(s):
     s = s.replace('\n', '\\n')
     s = s.replace('\r', '\\r')
     s = s.replace('\t', '\\t')
-    s = s.replace('</', '<\/')
+    s = s.replace('</', r'<\/')
     return Markup(s)
 
 app.jinja_env.filters['escapejs'] = escapejs_filter

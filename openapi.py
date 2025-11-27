@@ -17,7 +17,9 @@ model = "deepseek/DeepSeek-V3-0324"
 # Get token from environment variables
 token = os.getenv("GITHUB_PAT")
 if not token:
-    raise ValueError("GITHUB_PAT environment variable is not set. Please create a .env file with your GitHub PAT.")
+    # Allow deployment to proceed with warning
+    print("Warning: GITHUB_PAT environment variable is not set. AI features may not work properly.")
+    token = "placeholder_token"
 
 def get_ai_client() -> ChatCompletionsClient:
     """Initialize and return the Azure AI client."""
