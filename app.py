@@ -562,4 +562,8 @@ def logout():
 # - **Cloud deployment**: Possible future deployment to Azure or other cloud platforms.
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    # Bind to the port provided by the environment (Render provides PORT=10000)
+    port = int(os.environ.get('PORT', 10000))
+    # Allow toggling debug via environment variable (useful for local dev)
+    debug = str(os.environ.get('DEBUG', 'False')).lower() in ('1', 'true', 'yes')
+    app.run(host='0.0.0.0', port=port, debug=debug)
